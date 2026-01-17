@@ -1,0 +1,315 @@
+// --- 나이 구간별 운세 데이터 포맷 ---
+export const AGE_GROUP_CONFIG = {
+  child: {
+    range: [0, 12],
+    label: "유아/아동",
+    description: "성장과 발달의 시기",
+    fortunes: [
+      {
+        key: "성장운",
+        icon: "🌒",
+        color: "from-emerald-800/60 to-green-900/60",
+        borderColor: "border-emerald-600/40",
+      },
+      {
+        key: "건강운",
+        icon: "☯",
+        color: "from-red-800/60 to-rose-900/60",
+        borderColor: "border-red-600/40",
+      },
+      {
+        key: "학습운",
+        icon: "📒",
+        color: "from-yellow-800/60 to-amber-900/60",
+        borderColor: "border-yellow-600/40",
+      },
+      {
+        key: "재능운",
+        icon: "✧",
+        color: "from-purple-800/60 to-violet-900/60",
+        borderColor: "border-purple-600/40",
+      },
+    ],
+    promptItems: [
+      "【성장운】 아이의 신체적, 정서적 성장에 대한 운세",
+      "【건강운】 건강 관리에서 주의할 점",
+      "【학습운】 학습 능력과 집중력에 대한 분석",
+      "【재능운】 타고난 재능과 적성 분야",
+    ],
+    advice: "부모님께 드리는 양육 조언",
+  },
+  teen: {
+    range: [13, 19],
+    label: "청소년",
+    description: "배움과 성장의 시기",
+    fortunes: [
+      {
+        key: "학업운",
+        icon: "書",
+        color: "from-blue-800/60 to-indigo-900/60",
+        borderColor: "border-blue-600/40",
+      },
+      {
+        key: "시험운",
+        icon: "筆",
+        color: "from-emerald-800/60 to-teal-900/60",
+        borderColor: "border-emerald-600/40",
+      },
+      {
+        key: "교우관계",
+        icon: "友",
+        color: "from-pink-800/60 to-rose-900/60",
+        borderColor: "border-pink-600/40",
+      },
+      {
+        key: "진로운",
+        icon: "道",
+        color: "from-purple-800/60 to-violet-900/60",
+        borderColor: "border-purple-600/40",
+      },
+      {
+        key: "건강운",
+        icon: "☯",
+        color: "from-red-800/60 to-orange-900/60",
+        borderColor: "border-red-600/40",
+      },
+    ],
+    promptItems: [
+      "【학업운】 공부와 학습 능력에 대한 운세",
+      "【시험운】 시험과 성적에 대한 분석 (수능, 내신 등)",
+      "【교우관계】 친구 관계와 학교생활",
+      "【진로운】 적성과 진로 방향에 대한 조언",
+      "【건강운】 성장기 건강 관리 포인트",
+    ],
+    advice: "학업과 진로에 대한 맞춤 조언",
+  },
+  youngAdult: {
+    range: [20, 29],
+    label: "청년",
+    description: "도전과 시작의 시기",
+    fortunes: [
+      {
+        key: "취업운",
+        icon: "職",
+        color: "from-blue-800/60 to-cyan-900/60",
+        borderColor: "border-blue-600/40",
+      },
+      {
+        key: "연애운",
+        icon: "緣",
+        color: "from-pink-800/60 to-red-900/60",
+        borderColor: "border-pink-600/40",
+      },
+      {
+        key: "재물운",
+        icon: "財",
+        color: "from-yellow-800/60 to-amber-900/60",
+        borderColor: "border-yellow-600/40",
+      },
+      {
+        key: "자기개발",
+        icon: "進",
+        color: "from-purple-800/60 to-indigo-900/60",
+        borderColor: "border-purple-600/40",
+      },
+      {
+        key: "대인관계",
+        icon: "和",
+        color: "from-emerald-800/60 to-green-900/60",
+        borderColor: "border-emerald-600/40",
+      },
+    ],
+    promptItems: [
+      "【취업운】 취업과 직장 생활에 대한 운세",
+      "【연애운】 연애와 이성관계 운세",
+      "【재물운】 재정 관리와 저축에 대한 조언",
+      "【자기개발】 성장과 자기계발 방향",
+      "【대인관계】 사회생활과 인맥 관리",
+    ],
+    advice: "사회 초년생을 위한 맞춤 조언",
+  },
+  earlyMiddle: {
+    range: [30, 39],
+    label: "장년 초기",
+    description: "안정과 도약의 시기",
+    fortunes: [
+      {
+        key: "결혼운",
+        icon: "婚",
+        color: "from-pink-800/60 to-rose-900/60",
+        borderColor: "border-pink-600/40",
+      },
+      {
+        key: "직장운",
+        icon: "職",
+        color: "from-blue-800/60 to-indigo-900/60",
+        borderColor: "border-blue-600/40",
+      },
+      {
+        key: "재물운",
+        icon: "財",
+        color: "from-yellow-800/60 to-amber-900/60",
+        borderColor: "border-yellow-600/40",
+      },
+      {
+        key: "자녀운",
+        icon: "子",
+        color: "from-emerald-800/60 to-teal-900/60",
+        borderColor: "border-emerald-600/40",
+      },
+      {
+        key: "사업운",
+        icon: "業",
+        color: "from-purple-800/60 to-violet-900/60",
+        borderColor: "border-purple-600/40",
+      },
+    ],
+    promptItems: [
+      "【결혼운】 결혼과 배우자 관계에 대한 운세",
+      "【직장운】 직장에서의 승진과 성과",
+      "【재물운】 재테크와 자산 형성에 대한 조언",
+      "【자녀운】 자녀와의 관계 및 출산운",
+      "【사업운】 사업이나 창업에 대한 분석",
+    ],
+    advice: "가정과 커리어 균형을 위한 조언",
+  },
+  middleAge: {
+    range: [40, 49],
+    label: "장년 중기",
+    description: "성취와 안정의 시기",
+    fortunes: [
+      {
+        key: "사업운",
+        icon: "業",
+        color: "from-blue-800/60 to-cyan-900/60",
+        borderColor: "border-blue-600/40",
+      },
+      {
+        key: "재물운",
+        icon: "財",
+        color: "from-yellow-800/60 to-amber-900/60",
+        borderColor: "border-yellow-600/40",
+      },
+      {
+        key: "건강운",
+        icon: "☯",
+        color: "from-red-800/60 to-pink-900/60",
+        borderColor: "border-red-600/40",
+      },
+      {
+        key: "자녀교육",
+        icon: "敎",
+        color: "from-emerald-800/60 to-green-900/60",
+        borderColor: "border-emerald-600/40",
+      },
+      {
+        key: "부동산운",
+        icon: "宅",
+        color: "from-purple-800/60 to-indigo-900/60",
+        borderColor: "border-purple-600/40",
+      },
+    ],
+    promptItems: [
+      "【사업운】 사업 확장과 투자에 대한 운세",
+      "【재물운】 자산 관리와 재테크 방향",
+      "【건강운】 중년 건강 관리 포인트",
+      "【자녀교육】 자녀 교육과 진로 지도",
+      "【부동산운】 부동산 투자와 주거 관련 운세",
+    ],
+    advice: "인생 중반의 도약을 위한 조언",
+  },
+  lateMiddle: {
+    range: [50, 59],
+    label: "장년 후기",
+    description: "결실과 정리의 시기",
+    fortunes: [
+      {
+        key: "건강운",
+        icon: "☯",
+        color: "from-red-800/60 to-pink-900/60",
+        borderColor: "border-red-600/40",
+      },
+      {
+        key: "노후준비",
+        icon: "安",
+        color: "from-orange-800/60 to-amber-900/60",
+        borderColor: "border-orange-600/40",
+      },
+      {
+        key: "자녀결혼",
+        icon: "婚",
+        color: "from-pink-800/60 to-rose-900/60",
+        borderColor: "border-pink-600/40",
+      },
+      {
+        key: "재물운",
+        icon: "財",
+        color: "from-yellow-800/60 to-amber-900/60",
+        borderColor: "border-yellow-600/40",
+      },
+      {
+        key: "사업정리",
+        icon: "整",
+        color: "from-blue-800/60 to-indigo-900/60",
+        borderColor: "border-blue-600/40",
+      },
+    ],
+    promptItems: [
+      "【건강운】 건강 관리와 주의사항",
+      "【노후준비】 은퇴 준비와 노후 계획",
+      "【자녀결혼】 자녀의 결혼과 독립",
+      "【재물운】 자산 관리와 노후 자금",
+      "【사업정리】 사업 정리나 승계에 대한 조언",
+    ],
+    advice: "풍요로운 노후를 위한 조언",
+  },
+  senior: {
+    range: [60, 120],
+    label: "노년",
+    description: "지혜와 여유의 시기",
+    fortunes: [
+      {
+        key: "건강장수",
+        icon: "壽",
+        color: "from-emerald-800/60 to-teal-900/60",
+        borderColor: "border-emerald-600/40",
+      },
+      {
+        key: "가족관계",
+        icon: "家",
+        color: "from-pink-800/60 to-rose-900/60",
+        borderColor: "border-pink-600/40",
+      },
+      {
+        key: "여가운",
+        icon: "樂",
+        color: "from-purple-800/60 to-violet-900/60",
+        borderColor: "border-purple-600/40",
+      },
+      {
+        key: "자녀복",
+        icon: "福",
+        color: "from-blue-800/60 to-cyan-900/60",
+        borderColor: "border-blue-600/40",
+      },
+      {
+        key: "손주운",
+        icon: "孫",
+        color: "from-yellow-800/60 to-amber-900/60",
+        borderColor: "border-yellow-600/40",
+      },
+    ],
+    promptItems: [
+      "【건강장수】 건강 관리와 장수 비결",
+      "【가족관계】 가족과의 화목한 관계",
+      "【여가운】 취미와 여가 생활",
+      "【자녀복】 자녀들과의 관계와 효도",
+      "【손주운】 손주와의 인연과 관계",
+    ],
+    advice: "행복한 노년을 위한 조언",
+  },
+};
+
+
+
+
