@@ -665,7 +665,15 @@ ${ageSpecificPrompts}
             )}
 
             {/* 부족한 오행 제품 추천 */}
-            <ProductRecommendation weakElements={analysisResult.weakElements} />
+            <ProductRecommendation
+              weakElements={analysisResult.weakElements}
+              elementPercentages={
+                analysisResult.elements.reduce((acc, el) => {
+                  acc[el.name] = el.percentage;
+                  return acc;
+                }, {})
+              }
+            />
 
             {/* 다시 분석 버튼 */}
             <button
