@@ -120,7 +120,7 @@ export const getDetailedReason = (element, percentage, scoreBreakdown = {}) => {
 
   // 주요 이유
   if (deficiency > 0) {
-    reasons.push(`${element} 기운이 ${deficiency}% 부족합니다`);
+    reasons.push(`${element} 기운이 부족합니다`);
   }
 
   // 계절 이유

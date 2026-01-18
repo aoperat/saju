@@ -131,28 +131,8 @@ const ProductRecommendation = ({ weakElements, elementPercentages = {} }) => {
 
       <p className="text-sm text-stone-400 mb-4">
         부족한 오행의 기운을 보완해주는 아이템을 곁에 두면 좋습니다.
-        <span className="text-amber-500/70 ml-1">
-          (현재 {seasonName}철 기준 추천)
-        </span>
       </p>
 
-      {/* 필터 영역 */}
-      <div className="flex flex-wrap gap-2 mb-4 pb-4 border-b border-stone-700/50">
-        <span className="text-xs text-stone-500 self-center mr-2">가격대:</span>
-        {Object.entries(PRICE_RANGES).map(([key, range]) => (
-          <button
-            key={key}
-            onClick={() => setFilters((prev) => ({ ...prev, priceRange: key }))}
-            className={`text-xs px-3 py-1.5 rounded-lg transition-all ${
-              filters.priceRange === key
-                ? "bg-amber-600 text-white"
-                : "bg-stone-800 text-stone-400 hover:bg-stone-700"
-            }`}
-          >
-            {range.label}
-          </button>
-        ))}
-      </div>
 
       {/* 오행 탭 (점수순 정렬) */}
       <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
@@ -382,12 +362,6 @@ const ProductRecommendation = ({ weakElements, elementPercentages = {} }) => {
           ) : (
             <div className="text-center py-8 text-stone-500">
               <p>해당 조건에 맞는 추천 제품이 없습니다.</p>
-              <button
-                onClick={() => setFilters(DEFAULT_FILTERS)}
-                className="mt-2 text-sm text-amber-500 hover:text-amber-400"
-              >
-                필터 초기화
-              </button>
             </div>
           )}
         </div>

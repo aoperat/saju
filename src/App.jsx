@@ -462,55 +462,6 @@ ${ageSpecificPrompts}
               </div>
             </div>
 
-            {/* 오행 밸런스 */}
-            <div className="relative">
-              <div className="absolute -inset-[1px] bg-gradient-to-b from-amber-600/30 via-amber-800/20 to-amber-600/30 rounded-2xl"></div>
-              <div className="relative bg-gradient-to-b from-stone-900 to-stone-950 p-6 rounded-2xl">
-                <h3 className="text-center text-amber-500 text-sm tracking-widest mb-6">
-                  五 行 均 衡
-                </h3>
-                <div className="space-y-4">
-                  {analysisResult.elements.map((el) => (
-                    <div key={el.name} className="space-y-2">
-                      <div className="flex items-center justify-between text-base">
-                        <span className="flex items-center gap-3">
-                          <span
-                            className={`w-10 h-10 rounded-lg ${el.bgColor} flex items-center justify-center text-xl font-bold ${el.textColor}`}
-                          >
-                            {el.hanja}
-                          </span>
-                          <span className={`text-base font-medium ${el.textColor}`}>{el.name}</span>
-                          <span className={`text-sm hidden sm:inline ${el.textColor}/70`}>
-                            ({el.desc})
-                          </span>
-                        </span>
-                        <span className="font-mono text-amber-400 text-base">
-                          {el.count}개 ({el.percentage}%)
-                        </span>
-                      </div>
-                      <div className="h-2 bg-stone-800 rounded-full overflow-hidden">
-                        <div
-                          className={`h-full bg-gradient-to-r ${el.color} rounded-full transition-all duration-1000 ease-out`}
-                          style={{ width: `${Math.max(el.percentage, 3)}%` }}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                {analysisResult.weakElements.length > 0 && (
-                  <div className="mt-6 p-4 bg-red-950/30 border border-red-900/30 rounded-xl">
-                    <p className="text-base text-red-300">
-                      ⚠ 부족한 기운:{" "}
-                      <strong className="text-red-200">
-                        {analysisResult.weakElements
-                          .map((e) => `${e.hanja}(${e.name})`)
-                          .join(", ")}
-                      </strong>
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
 
             {/* 종합운 */}
             {analysisResult.aiAnalysis["종합운"] && (
