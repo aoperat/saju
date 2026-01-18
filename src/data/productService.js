@@ -17,30 +17,7 @@ export const getProductsByElement = async (element, filters = {}) => {
     let query = supabase
       .from("saju_products")
       .select("*")
-      .eq("element", element)
-      .eq("is_active", true);
-
-    // 가격대 필터
-    if (filters.minPrice) {
-      query = query.gte("price", filters.minPrice);
-    }
-    if (filters.maxPrice) {
-      query = query.lte("price", filters.maxPrice);
-    }
-
-    // 성별 필터 (target_gender 컬럼이 있는 경우)
-    if (filters.gender && filters.gender !== "공용") {
-      query = query.or(`target_gender.eq.${filters.gender},target_gender.eq.공용`);
-    }
-
-    // 용도 필터 (purpose 컬럼이 있는 경우)
-    if (filters.purpose && filters.purpose !== "all") {
-      query = query.or(`purpose.eq.${filters.purpose},purpose.eq.both`);
-    }
-
-    // 인기순 정렬 (popularity_score가 있으면 사용, 없으면 최신순)
-    query = query.order("popularity_score", { ascending: false, nullsFirst: false });
-    query = query.order("created_at", { ascending: false });
+      .eq("element", element);
 
     const { data, error } = await query;
 

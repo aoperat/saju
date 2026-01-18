@@ -69,10 +69,18 @@ const ProductRecommendation = ({ weakElements, elementPercentages = {} }) => {
       // 새 Swiper 인스턴스 생성
       swiperInstanceRef.current = new window.Swiper(swiperRef.current, {
         slidesPerView: 1,
-        spaceBetween: 16,
+        spaceBetween: 12,
+        grid: {
+          rows: 2,
+          fill: "row",
+        },
+        autoplay: {
+          delay: 5000,
+          disableOnInteraction: false,
+        },
         pagination: {
           el: ".swiper-pagination",
-          clickable: true,
+          type: "fraction",
         },
         navigation: {
           nextEl: ".swiper-button-next",
@@ -343,20 +351,31 @@ const ProductRecommendation = ({ weakElements, elementPercentages = {} }) => {
                   ))}
                 </div>
 
-                {/* Swiper 페이지네이션 */}
-                <div className="swiper-pagination mt-4"></div>
               </div>
 
-              {/* Swiper 네비게이션 버튼 */}
+              {/* 하단 네비게이션 영역 */}
               {currentProducts.length > 1 && (
-                <>
+                <div className="flex items-center justify-center gap-6 mt-4 pt-4 border-t border-stone-800/50">
                   <button
-                    className={`swiper-button-prev !w-10 !h-10 !rounded-full !bg-gradient-to-r ${ELEMENT_INFO[activeTab]?.color} after:!text-sm after:!text-white`}
-                  />
+                    className="swiper-button-prev !static !w-8 !h-8 !mt-0 after:!hidden text-stone-500 hover:text-amber-400 transition-colors"
+                    aria-label="Previous slide"
+                    onClick={() => swiperInstanceRef.current?.slidePrev()}
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    </svg>
+                  </button>
+                  <div className="swiper-pagination !static !w-auto text-amber-500/80 text-sm font-medium"></div>
                   <button
-                    className={`swiper-button-next !w-10 !h-10 !rounded-full !bg-gradient-to-r ${ELEMENT_INFO[activeTab]?.color} after:!text-sm after:!text-white`}
-                  />
-                </>
+                    className="swiper-button-next !static !w-8 !h-8 !mt-0 after:!hidden text-stone-500 hover:text-amber-400 transition-colors"
+                    aria-label="Next slide"
+                    onClick={() => swiperInstanceRef.current?.slideNext()}
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                </div>
               )}
             </div>
           ) : (

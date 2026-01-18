@@ -16,6 +16,46 @@ import { callOpenAI } from "./utils/openai.js";
 import { TaegeukSymbol, CloudPattern, PalgwaeSymbol } from "./components/Symbols.jsx";
 import ProductRecommendation from "./components/ProductRecommendation.jsx";
 
+// localStorage 키
+const STORAGE_KEY = "saju_analysis_history";
+
+// 저장된 분석 결과 불러오기
+const loadHistory = () => {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    return saved ? JSON.parse(saved) : [];
+  } catch {
+    return [];
+  }
+};
+
+// 분석 결과 저장
+const saveToHistory = (formData, result) => {
+  const history = loadHistory();
+  const key = `${formData.date}_${formData.time}_${formData.gender}_${formData.calendarType}`;
+
+  // 중복 제거 후 새 항목 추가
+  const filtered = history.filter(item => item.key !== key);
+  const newEntry = {
+    key,
+    formData,
+    result,
+    savedAt: new Date().toISOString(),
+  };
+
+  // 최대 10개까지만 저장
+  const updated = [newEntry, ...filtered].slice(0, 10);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+  return updated;
+};
+
+// 캐시된 결과 찾기
+const findCachedResult = (formData) => {
+  const history = loadHistory();
+  const key = `${formData.date}_${formData.time}_${formData.gender}_${formData.calendarType}`;
+  return history.find(item => item.key === key);
+};
+
 // --- 메인 앱 컴포넌트 ---
 const App = () => {
   const [view, setView] = useState("home");
@@ -28,6 +68,12 @@ const App = () => {
     calendarType: "양력",
   });
   const [analysisResult, setAnalysisResult] = useState(null);
+  const [history, setHistory] = useState([]);
+
+  // 컴포넌트 마운트 시 히스토리 로드
+  useEffect(() => {
+    setHistory(loadHistory());
+  }, []);
 
   const loadingSteps = [
     "사주팔자를 계산하고 있습니다",
@@ -51,6 +97,15 @@ const App = () => {
   const handleAnalyze = async () => {
     if (!formData.date) {
       alert("생년월일을 입력해주세요.");
+      return;
+    }
+
+    // 캐시된 결과가 있는지 확인
+    const cached = findCachedResult(formData);
+    if (cached) {
+      setAnalysisResult(cached.result);
+      setView("report");
+      window.scrollTo(0, 0);
       return;
     }
 
@@ -137,7 +192,7 @@ ${ageSpecificPrompts}
 
     const parsedAI = parseAIResponse(aiResponse);
 
-    setAnalysisResult({
+    const result = {
       saju,
       elements,
       daeun,
@@ -149,11 +204,31 @@ ${ageSpecificPrompts}
       birthInfo: { year, month, day, gender: formData.gender, calendarType: formData.calendarType },
       age,
       ageGroup,
-    });
+    };
+
+    // localStorage에 저장
+    const updatedHistory = saveToHistory(formData, result);
+    setHistory(updatedHistory);
+    setAnalysisResult(result);
 
     setLoading(false);
     setView("report");
     window.scrollTo(0, 0);
+  };
+
+  // 히스토리에서 결과 불러오기
+  const loadFromHistory = (entry) => {
+    setFormData(entry.formData);
+    setAnalysisResult(entry.result);
+    setView("report");
+    window.scrollTo(0, 0);
+  };
+
+  // 히스토리 항목 삭제
+  const deleteFromHistory = (key) => {
+    const updated = history.filter(item => item.key !== key);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+    setHistory(updated);
   };
 
   const timeOptions = [
@@ -332,6 +407,58 @@ ${ageSpecificPrompts}
             <p className="text-center text-stone-600 text-xs tracking-wide">
               ※ 본 사주풀이는 참고용이며 재미로 봐주시기 바랍니다
             </p>
+
+            {/* 저장된 분석 히스토리 */}
+            {history.length > 0 && (
+              <div className="relative mt-8">
+                <div className="absolute -inset-[1px] bg-gradient-to-b from-stone-700/50 via-stone-800/30 to-stone-700/50 rounded-2xl"></div>
+                <div className="relative bg-gradient-to-b from-stone-900 to-stone-950 p-6 rounded-2xl">
+                  <h3 className="text-amber-500 text-sm tracking-widest mb-4 flex items-center gap-2">
+                    <span className="text-lg">歷</span> 이전 분석 기록
+                  </h3>
+                  <div className="space-y-3">
+                    {history.map((entry) => {
+                      const { year, month, day } = entry.result.birthInfo;
+                      return (
+                        <div
+                          key={entry.key}
+                          className="flex items-center justify-between p-3 bg-stone-800/50 rounded-xl border border-stone-700/50 hover:border-amber-600/30 transition-all"
+                        >
+                          <button
+                            onClick={() => loadFromHistory(entry)}
+                            className="flex-1 text-left flex items-center gap-3"
+                          >
+                            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-800 to-amber-900 flex items-center justify-center text-amber-300 font-bold">
+                              {entry.result.birthInfo.gender === "남" ? "乾" : "坤"}
+                            </div>
+                            <div>
+                              <p className="text-stone-200 text-sm font-medium">
+                                {year}년 {month}월 {day}일 ({entry.formData.calendarType})
+                              </p>
+                              <p className="text-stone-500 text-xs">
+                                {entry.formData.time} · {entry.result.birthInfo.gender}성 · 만 {entry.result.age}세
+                              </p>
+                            </div>
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              deleteFromHistory(entry.key);
+                            }}
+                            className="p-2 text-stone-600 hover:text-red-400 transition-colors"
+                            title="삭제"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         )}
 
@@ -626,17 +753,29 @@ ${ageSpecificPrompts}
               }
             />
 
-            {/* 다시 분석 버튼 */}
-            <button
-              onClick={() => {
-                setView("home");
-                setFormData({ date: "", time: "모름", gender: "남", calendarType: "양력" });
-                setAnalysisResult(null);
-              }}
-              className="w-full py-4 text-sm text-stone-500 hover:text-amber-400 transition-colors tracking-widest"
-            >
-              ← 다시 감정하기
-            </button>
+            {/* 하단 버튼 영역 */}
+            <div className="space-y-3 pt-4">
+              <button
+                onClick={() => {
+                  setView("home");
+                  setFormData({ date: "", time: "모름", gender: "남", calendarType: "양력" });
+                  setAnalysisResult(null);
+                }}
+                className="w-full py-4 bg-gradient-to-r from-amber-800 via-amber-700 to-amber-800 hover:from-amber-700 hover:via-amber-600 hover:to-amber-700 text-amber-100 rounded-xl font-medium tracking-widest transition-all shadow-lg shadow-amber-900/30 border border-amber-600/30"
+              >
+                다른 사람 분석하기
+              </button>
+              {history.length > 0 && (
+                <button
+                  onClick={() => {
+                    setView("home");
+                  }}
+                  className="w-full py-3 text-sm text-stone-500 hover:text-amber-400 transition-colors tracking-widest"
+                >
+                  ← 분석 기록 보기
+                </button>
+              )}
+            </div>
           </div>
         )}
       </div>
